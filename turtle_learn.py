@@ -1,4 +1,6 @@
 import turtle
+import winsound
+import random
 
 wn = turtle.Screen()
 wn.title("Pong by kevin")
@@ -34,8 +36,8 @@ ball.shapesize(stretch_wid=1.5, stretch_len=1.5)
 ball.color("yellow")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 0.1
-ball.dy = -0.1
+ball.dx = 0.3
+ball.dy = -0.3
 
 #score board
 score_board = turtle.Turtle()
@@ -44,20 +46,20 @@ score_board.color("white")
 score_board.penup()
 score_board.hideturtle()
 score_board.goto(0,270)
-score_board.write("your score = {} Computer score = {}".format(your_score,Computer_score),align="center",font=("Arial",8,"normal"))
+score_board.write("your score = {} Computer score = {}".format(your_score,Computer_score),align="center",font=("Arial",18,"normal"))
 
 
 # function
 
 def left_pad_up():
     y = left_pad.ycor()
-    y += 20
+    y += 10
     left_pad.sety(y)
 
 
 def left_pad_down():
     y = left_pad.ycor()
-    y -= 20
+    y -= 10
     left_pad.sety(y)
 
 
@@ -72,17 +74,20 @@ while True:
     # movie ball
     ball.setx(ball.xcor() + ball.dx)
     ball.sety(ball.ycor() + ball.dy)
-    if(ball.xcor()>0):
+    if(ball.xcor()>(random.randint(0,10)*100)):
         right_pad.sety(ball.ycor())
+
 
     # wall define
     if (ball.ycor() > 290):
         ball.sety(290)
         ball.dy *= -1
+        winsound.PlaySound("bounce.wav",winsound.SND_ASYNC)
 
     if (ball.ycor() < -290):
         ball.sety(-290)
         ball.dy *= -1
+        winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
 
     if (ball.xcor() > 380 ):
         ball.setx(0)
@@ -91,7 +96,9 @@ while True:
         ball.dx *= -1
         score_board.clear()
         score_board.write("your score = {} Computer score = {}".format(your_score, Computer_score), align="center",
-                          font=("Arial", 8, "normal"))
+                          font=("Arial", 18, "normal"))
+        winsound.PlaySound("lose.wav", winsound.SND_ASYNC)
+
 
     if (ball.xcor() < -380 ):
         ball.setx(0)
@@ -100,14 +107,17 @@ while True:
         ball.dx *= -1
         score_board.clear()
         score_board.write("your score = {} Computer score = {}".format(your_score, Computer_score), align="center",
-                          font=("Arial", 8, "normal"))
+                          font=("Arial", 18, "normal"))
+        winsound.PlaySound("lose.wav", winsound.SND_ASYNC)
 
     #pad & ball collisation
 
     if((ball.xcor() > 360 and ball.xcor() < 370) and (ball.ycor()<right_pad.ycor() + 50  and ball.ycor()>right_pad.ycor() - 50)):
         ball.setx(360)
+        winsound.PlaySound("attack.wav", winsound.SND_ASYNC)
         ball.dx *= -1
 
     if ((ball.xcor() < -360 and ball.xcor() > -370) and (ball.ycor() < left_pad.ycor() + 50 and ball.ycor() > left_pad.ycor() - 50)):
         ball.setx(-360)
+        winsound.PlaySound("attack.wav", winsound.SND_ASYNC)
         ball.dx *= -1
